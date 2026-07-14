@@ -77,13 +77,13 @@ O Design System do governo brasileiro tem como objetivo garantir consistência e
 
 ### Alternativas consideradas
 
-| Critério | Apache Superset | Metabase OSS |
-|---|---|---|
-| Customização estrutural e branding | Melhor perspectiva de evolução de theming e uso de imagem/configuração própria. [cite:13][cite:21][cite:23] | Branding oficial concentrado em recursos pagos; OSS com forte limitação para personalização profunda. [cite:11][cite:12][cite:19] |
-| Aderência a white-label institucional | Mais adequada para estratégia por camadas e custom image. [cite:13][cite:22][cite:23] | Possível apenas com embed, hacks ou fork, com menor previsibilidade. [cite:12][cite:15][cite:16] |
-| Manutenção sem fork | Viável como estratégia principal. [cite:21][cite:23] | Limitada para objetivos de identidade institucional forte. [cite:11][cite:12] |
-| Flexibilidade técnica | Alta, especialmente para equipes com perfil de infraestrutura e desenvolvimento. [cite:21][cite:22] | Mais simples para uso rápido, porém menos moldável no OSS. [cite:11][cite:12] |
-| Embeds | Suportados, inclusive em cenários autenticados e integrados. [cite:21][cite:27] | Também suportados, com customização mais conveniente no contexto de modular embeds. [cite:15] |
+| Critério                              | Apache Superset                                                                                             | Metabase OSS                                                                                                                      |
+|---------------------------------------|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Customização estrutural e branding    | Melhor perspectiva de evolução de theming e uso de imagem/configuração própria. [cite:13][cite:21][cite:23] | Branding oficial concentrado em recursos pagos; OSS com forte limitação para personalização profunda. [cite:11][cite:12][cite:19] |
+| Aderência a white-label institucional | Mais adequada para estratégia por camadas e custom image. [cite:13][cite:22][cite:23]                       | Possível apenas com embed, hacks ou fork, com menor previsibilidade. [cite:12][cite:15][cite:16]                                  |
+| Manutenção sem fork                   | Viável como estratégia principal. [cite:21][cite:23]                                                        | Limitada para objetivos de identidade institucional forte. [cite:11][cite:12]                                                     |
+| Flexibilidade técnica                 | Alta, especialmente para equipes com perfil de infraestrutura e desenvolvimento. [cite:21][cite:22]         | Mais simples para uso rápido, porém menos moldável no OSS. [cite:11][cite:12]                                                     |
+| Embeds                                | Suportados, inclusive em cenários autenticados e integrados. [cite:21][cite:27]                             | Também suportados, com customização mais conveniente no contexto de modular embeds. [cite:15]                                     |
 
 ### Escolha adotada
 
@@ -172,16 +172,16 @@ Ordem de adoção recomendada:
 
 ### Matriz de overrides
 
-| Camada | Objetivo | Mecanismo preferencial | Exemplo de artefato | Impacto em upgrade | Risco | Recomendação |
-|---|---|---|---|---|---|---|
-| Reverse proxy | Cabeçalhos, TLS, roteamento, CSP, paths | Configuração Nginx/Traefik | `infra/proxy/` | Baixo | Baixo | Padrão |
-| Build/Imagem | Empacotar assets e config institucional | Dockerfile customizado | `docker/Dockerfile` | Baixo a médio | Baixo | Padrão |
-| Configuração Python | Autenticação, branding, flags e integrações | `superset_config.py` | `config/superset_config.py` | Baixo | Baixo | Padrão |
-| Assets estáticos | Logo, favicon, imagens e CSS complementar | Pasta de assets empacotada | `theme/assets/` | Baixo | Baixo | Padrão |
-| Templates | Ajustes controlados de telas, como login | Template override localizado | `theme/templates/` | Médio | Médio | Preferível antes de fork |
-| Tokens visuais | Cores, fontes, espaçamento, DS-BR | CSS institucional versionado | `theme/css/dsbr-theme.css` | Médio | Médio | Usar com parcimônia |
-| Embeds | Aparência e integração externa | Configuração por portal host | `embeds/` | Baixo | Baixo | Padrão |
-| Frontend React | Alterações profundas de componentes | Patch/fork localizado | `patches/` ou fork | Alto | Alto | Exceção |
+| Camada              | Objetivo                                    | Mecanismo preferencial       | Exemplo de artefato         | Impacto em upgrade  | Risco  | Recomendação              |
+|---------------------|---------------------------------------------|------------------------------|-----------------------------|---------------------|--------|---------------------------|
+| Reverse proxy       | Cabeçalhos, TLS, roteamento, CSP, paths     | Configuração Nginx/Traefik   | `infra/proxy/`              | Baixo               | Baixo  | Padrão                    |
+| Build/Imagem        | Empacotar assets e config institucional     | Dockerfile customizado       | `docker/Dockerfile`         | Baixo a médio       | Baixo  | Padrão                    |
+| Configuração Python | Autenticação, branding, flags e integrações | `superset_config.py`         | `config/superset_config.py` | Baixo               | Baixo  | Padrão                    |
+| Assets estáticos    | Logo, favicon, imagens e CSS complementar   | Pasta de assets empacotada   | `theme/assets/`             | Baixo               | Baixo  | Padrão                    |
+| Templates           | Ajustes controlados de telas, como login    | Template override localizado | `theme/templates/`          | Médio               | Médio  | Preferível antes de fork  |
+| Tokens visuais      | Cores, fontes, espaçamento, DS-BR           | CSS institucional versionado | `theme/css/dsbr-theme.css`  | Médio               | Médio  | Usar com parcimônia       |
+| Embeds              | Aparência e integração externa              | Configuração por portal host | `embeds/`                   | Baixo               | Baixo  | Padrão                    |
+| Frontend React      | Alterações profundas de componentes         | Patch/fork localizado        | `patches/` ou fork          | Alto                | Alto   | Exceção                   |
 
 ### Diretrizes por camada
 
@@ -225,13 +225,13 @@ Recomenda-se separar o versionamento da solução e do tema institucional. Assim
 
 ### Política sugerida de versionamento
 
-| Artefato | Convenção sugerida | Destino |
-|---|---|---|
-| Solução integrada | `vX.Y.Z-dev` | Desenvolvimento |
-| Solução integrada | `vX.Y.Z` | Produção |
-| Tema institucional | `theme-vA.B.C-dev` | Desenvolvimento |
-| Tema institucional | `theme-vA.B.C` | Produção |
-| Compatibilidade | `Superset 6.0.x + Theme 1.2.x` | Matriz documental |
+| Artefato           | Convenção sugerida             | Destino           |
+|--------------------|--------------------------------|-------------------|
+| Solução integrada  | `vX.Y.Z-dev`                   | Desenvolvimento   |
+| Solução integrada  | `vX.Y.Z`                       | Produção          |
+| Tema institucional | `theme-vA.B.C-dev`             | Desenvolvimento   |
+| Tema institucional | `theme-vA.B.C`                 | Produção          |
+| Compatibilidade    | `Superset 6.0.x + Theme 1.2.x` | Matriz documental |
 
 ## Estrutura de pastas sugerida
 
@@ -272,27 +272,27 @@ superset-institucional-ds-br/
 
 ## Matriz de componentes
 
-| Componente | Papel arquitetural | Tecnologia | Observações |
-|---|---|---|---|
-| Plataforma analítica | Core da solução | Apache Superset | Base da aplicação. [cite:21] |
-| Banco de metadados | Persistência de configuração e estado | PostgreSQL | Banco previsto para o projeto. [cite:21][cite:27] |
-| Cache | Cache e suporte operacional | Valkey | Compatível com papel normalmente exercido por Redis-like. [cite:21] |
-| Proxy reverso | Entrada HTTP, TLS e headers | Nginx ou Traefik | Camada perimetral compatível. [cite:27][cite:30] |
-| Autenticação | Login local, OAuth2, LDAP, acesso.gov.br | Flask AppBuilder / provedores | Configurável por ambiente. [cite:21][cite:31] |
-| Tema institucional | Branding e aderência DS-BR | Assets, CSS, templates | Separado da aplicação. [cite:23][cite:26][cite:32] |
-| Portal hospedeiro de embed | Consumo externo autenticado ou público | Django e Moodle | Casos previstos. [cite:21][cite:27] |
-| CI/CD | Build e deploy | GitHub Actions | Fluxo por tags e releases. [cite:22] |
+| Componente                 | Papel arquitetural                       | Tecnologia                    | Observações                                                         |
+|----------------------------|------------------------------------------|-------------------------------|---------------------------------------------------------------------|
+| Plataforma analítica       | Core da solução                          | Apache Superset               | Base da aplicação. [cite:21]                                        |
+| Banco de metadados         | Persistência de configuração e estado    | PostgreSQL                    | Banco previsto para o projeto. [cite:21][cite:27]                   |
+| Cache                      | Cache e suporte operacional              | Valkey                        | Compatível com papel normalmente exercido por Redis-like. [cite:21] |
+| Proxy reverso              | Entrada HTTP, TLS e headers              | Nginx ou Traefik              | Camada perimetral compatível. [cite:27][cite:30]                    |
+| Autenticação               | Login local, OAuth2, LDAP, acesso.gov.br | Flask AppBuilder / provedores | Configurável por ambiente. [cite:21][cite:31]                       |
+| Tema institucional         | Branding e aderência DS-BR               | Assets, CSS, templates        | Separado da aplicação. [cite:23][cite:26][cite:32]                  |
+| Portal hospedeiro de embed | Consumo externo autenticado ou público   | Django e Moodle               | Casos previstos. [cite:21][cite:27]                                 |
+| CI/CD                      | Build e deploy                           | GitHub Actions                | Fluxo por tags e releases. [cite:22]                                |
 
 ## Riscos arquiteturais
 
-| ID | Risco | Probabilidade | Impacto | Resposta |
-|---|---|---|---|---|
-| R1 | Necessidade de override profundo em frontend para aderência completa ao DS-BR | Média | Alto | Priorizar camadas superiores; formalizar ADR antes de patch. |
-| R2 | Incompatibilidade entre nova release upstream e tema institucional | Média | Alto | Manter matriz de compatibilidade e checklist de upgrade. |
-| R3 | Complexidade de autenticação em múltiplos modos | Média | Médio | Habilitar por ambiente e começar com OAuth2. |
-| R4 | Exposição indevida em embeds públicos | Média | Alto | Endurecer governança de publicação, proxy e políticas de acesso. |
-| R5 | Acoplamento excessivo entre versão da solução e do tema | Média | Médio | Versionamento desacoplado com compatibilidade explícita. |
-| R6 | Escalada prematura para Kubernetes sem maturidade operacional | Baixa | Médio | Manter Compose como baseline e K8s como referência futura. |
+| ID  | Risco                                                                         | Probabilidade  | Impacto  | Resposta                                                         |
+|-----|-------------------------------------------------------------------------------|----------------|----------|------------------------------------------------------------------|
+| R1  | Necessidade de override profundo em frontend para aderência completa ao DS-BR | Média          | Alto     | Priorizar camadas superiores; formalizar ADR antes de patch.     |
+| R2  | Incompatibilidade entre nova release upstream e tema institucional            | Média          | Alto     | Manter matriz de compatibilidade e checklist de upgrade.         |
+| R3  | Complexidade de autenticação em múltiplos modos                               | Média          | Médio    | Habilitar por ambiente e começar com OAuth2.                     |
+| R4  | Exposição indevida em embeds públicos                                         | Média          | Alto     | Endurecer governança de publicação, proxy e políticas de acesso. |
+| R5  | Acoplamento excessivo entre versão da solução e do tema                       | Média          | Médio    | Versionamento desacoplado com compatibilidade explícita.         |
+| R6  | Escalada prematura para Kubernetes sem maturidade operacional                 | Baixa          | Médio    | Manter Compose como baseline e K8s como referência futura.       |
 
 ## Governança de atualização
 
