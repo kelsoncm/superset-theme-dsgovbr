@@ -1,0 +1,80 @@
+<!-- 
+  Exemplo de template Django para renderizar o dashboard via Superset Embedded SDK.
+  Leia AGENTS.md antes de alterar este arquivo.
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Integrado - SupersetBR</title>
+    <!-- Importação do SDK oficial do Superset para Embedding -->
+    <script src="https://unpkg.com/@superset-ui/embedded-sdk"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        #dashboard-container {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* Garantindo que o iframe ocupe todo o container */
+        #dashboard-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h2>Painel de Indicadores Governamentais</h2>
+        <p>Dashboard embarcado com segurança e identidade visual customizada via SupersetBR.</p>
+    </div>
+
+    <!-- Container onde o SDK irá injetar o Iframe do Superset -->
+    <div id="dashboard-container"></div>
+
+    <script>
+        // Função executada no carregamento da página
+        async function loadDashboard() {
+            const dashboardId = "{{ dashboard_id }}";
+            const supersetUrl = "{{ superset_url }}";
+
+            // 1. Requisita o Guest Token gerado de forma segura pelo backend do Django
+            const response = await fetch(`/embed/get-token/${dashboardId}/`);
+            if (!response.ok) {
+                console.error("Falha ao obter o guest token de segurança.");
+                return;
+            }
+            const data = await response.json();
+            const guestToken = data.token;
+
+            // 2. Inicializa a incorporação através do SDK do Superset
+            supersetEmbeddedSdk.embedDashboard({
+                id: dashboardId, // UUID do Dashboard do Superset
+                supersetDomain: supersetUrl,
+                mountPoint: document.getElementById("dashboard-container"),
+                fetchGuestToken: () => guestToken,
+                dashboardUiConfig: {
+                    hideTitle: true,
+                    hideTabParent: false,
+                    hideChartControls: true
+                }
+            });
+        }
+
+        window.onload = loadDashboard;
+    </script>
+</body>
+</html>

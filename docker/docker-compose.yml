@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: superset_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-superset}
+      POSTGRES_USER: ${DB_USER:-superset}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-superset_password}
+    volumes:
+      - db_home:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-superset} -d ${DB_NAME:-superset}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  valkey:
+    image: valkey/valkey:7.2-alpine
+    container_name: superset_valkey
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - valkey_data:/data
+    healthcheck:
+      test: ["CMD", "valkey-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  superset:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: superset_app
+    restart: unless-stopped
+    command: ["/usr/bin/run-server.sh"]
+    ports:
+      - "8088:8088"
+    depends_on:
+      db:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    user: "superset"
+    environment:
+      # Configurações de Conexão
+      SQLALCHEMY_DATABASE_URI: postgresql://${DB_USER:-superset}:${DB_PASSWORD:-superset_password}@db:5432/${DB_NAME:-superset}
+      REDIS_HOST: valkey
+      REDIS_PORT: 6379
+      
+      # Segurança e Configurações FAB
+      SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:-um_segredo_muito_longo_e_aleatorio_12345}
+      AUTH_TYPE: ${AUTH_TYPE:-1} # 1 = AUTH_DB (Local), 2 = AUTH_OAUTH (Acesso.gov.br)
+      
+      # Provedor OAuth Gov.br
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID:-}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET:-}
+      
+      # Variáveis Celery / Cache
+      SUPERSET_ENV: ${SUPERSET_ENV:-production}
+    volumes:
+      # Permite overrides em desenvolvimento
+      - ../config/superset_config.py:/app/pythonpath/superset_config.py
+      - superset_home:/app/superset_home
+
+  superset-init:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: superset_init
+    depends_on:
+      db:
+        condition: service_healthy
+      valkey:
+        condition: service_healthy
+    user: "superset"
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Iniciando upgrades de banco...';
+      superset db upgrade;
+      echo 'Criando usuario admin inicial...';
+      superset fab create-admin --username admin --firstname Admin --lastname SupersetBR --email admin@supersetbr.gov.br --password ${ADMIN_PASSWORD:-admin};
+      echo 'Inicializando papeis e permissoes...';
+      superset init;
+      echo 'Inicializacao completa.';
+      "
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql://${DB_USER:-superset}:${DB_PASSWORD:-superset_password}@db:5432/${DB_NAME:-superset}
+      SUPERSET_SECRET_KEY: ${SUPERSET_SECRET_KEY:-um_segredo_muito_longo_e_aleatorio_12345}
+    volumes:
+      - superset_home:/app/superset_home
+
+  proxy:
+    image: nginx:1.25-alpine
+    container_name: superset_proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - superset
+    volumes:
+      - ../infra/proxy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../infra/proxy/nginx/conf.d:/etc/nginx/conf.d:ro
+
+volumes:
+  db_home:
+  valkey_data:
+  superset_home:

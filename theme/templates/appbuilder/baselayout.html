@@ -1,0 +1,9 @@
+{% extends "appbuilder/baselayout.html" %}
+
+{% block head_css %}
+    {{ super() }}
+    <!-- Injeção do Tema DSGovBR -->
+    <link rel="stylesheet" href="/static/assets/stylesheets/dsgovbr-theme.css">
+    <!-- Adicionando Fonte Rawline do Governo Federal -->
+    <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/rawline" crossorigin="anonymous">
+{% endblock %}

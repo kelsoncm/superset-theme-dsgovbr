@@ -1,0 +1,106 @@
+/* 
+ * dsgovbr-theme.css - Estilos do SupersetBR alinhados ao Design System do Governo Federal (DSGovBR)
+ * Leia AGENTS.md antes de alterar este arquivo.
+ */
+
+:root {
+  /* Cores de Marca / Identidade */
+  --dsgovbr-blue-dark: #0c326f;      /* Azul Escuro (Hover) */
+  --dsgovbr-blue-primary: #1351b4;   /* Azul Principal (Active) */
+  --dsgovbr-blue-light: #2670e8;     /* Azul Claro */
+  
+  /* Cores de Apoio / Status */
+  --dsgovbr-success: #158447;
+  --dsgovbr-danger: #e52207;
+  --dsgovbr-warning: #ffcd1c;
+  --dsgovbr-info: #15a3c7;
+
+  /* Tons Neutros */
+  --dsgovbr-gray-dark: #333333;      /* Texto Principal */
+  --dsgovbr-gray-medium: #888888;    /* Bordas e Textos Secundários */
+  --dsgovbr-gray-light: #f8f8f8;     /* Fundo de Seções */
+  --dsgovbr-gray-background: #fafafa;/* Fundo Geral */
+  --dsgovbr-white: #ffffff;
+  
+  /* Tipografia */
+  --dsgovbr-font-family: "Rawline", "Raleway", "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  
+  /* Espaçamentos e Bordas */
+  --dsgovbr-border-radius: 4px;
+  --dsgovbr-spacing-xs: 8px;
+  --dsgovbr-spacing-sm: 16px;
+  --dsgovbr-spacing-md: 24px;
+  --dsgovbr-spacing-lg: 32px;
+}
+
+/* Aplicar fonte institucional global */
+body, html, input, button, select, textarea {
+  font-family: var(--dsgovbr-font-family) !important;
+  color: var(--dsgovbr-gray-dark);
+}
+
+/* Customização da Tela de Login do Flask-AppBuilder (FAB) */
+.login-box {
+  border-top: 4px solid var(--dsgovbr-blue-primary) !important;
+  border-radius: var(--dsgovbr-border-radius) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+  background-color: var(--dsgovbr-white) !important;
+  padding: var(--dsgovbr-spacing-md) !important;
+}
+
+.login-box .btn-primary, 
+.login-box .btn-submit {
+  background-color: var(--dsgovbr-blue-primary) !important;
+  border-color: var(--dsgovbr-blue-primary) !important;
+  color: var(--dsgovbr-white) !important;
+  font-weight: 600 !important;
+  transition: background-color 0.2s ease;
+}
+
+.login-box .btn-primary:hover, 
+.login-box .btn-submit:hover {
+  background-color: var(--dsgovbr-blue-dark) !important;
+  border-color: var(--dsgovbr-blue-dark) !important;
+}
+
+/* Customizações do Header/Navbar do FAB */
+.navbar-inverse {
+  background-color: var(--dsgovbr-blue-dark) !important;
+  border-bottom: 2px solid var(--dsgovbr-blue-primary) !important;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+  color: var(--dsgovbr-white) !important;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+  background-color: var(--dsgovbr-blue-primary) !important;
+}
+
+.navbar-inverse .navbar-brand {
+  color: var(--dsgovbr-white) !important;
+  font-weight: bold;
+}
+
+/* Estilização para botões de login social / OAuth */
+.btn-oauth-govbr {
+  background-color: var(--dsgovbr-blue-primary) !important;
+  color: var(--dsgovbr-white) !important;
+  border: 1px solid var(--dsgovbr-blue-primary) !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  font-weight: bold !important;
+  border-radius: var(--dsgovbr-border-radius) !important;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-oauth-govbr:hover {
+  background-color: var(--dsgovbr-blue-dark) !important;
+  border-color: var(--dsgovbr-blue-dark) !important;
+}
