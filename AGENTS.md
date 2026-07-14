@@ -40,11 +40,11 @@ Não quebrar upstream. Não inventar moda sem olhar o documento.
      - assets,  
      - CSS,  
      - templates,  
-     - Dockerfile. [web:21][web:22][web:23]
+     - Dockerfile.
 
 2. **DAS manda**  
    - Mudança contra o DAS → errado.  
-   - Atualizar DAS se arquitetura mudar.
+   - Atualizar DAS se arquitetura mudar, mas apenas se explicitamente autorizado.
 
 3. **Tudo com trilha**  
    - Decisão grande → ADR em `docs/adr/`.
@@ -83,7 +83,7 @@ Regras:
 
 - Seguir padrão DSGovBR (cores, contraste, acessibilidade).
 - Nome de classe e token limpos, sem gambiarras.  
-- Mudou tema → atualizar manifest e, se preciso, DAS.
+- Mudou tema → atualizar manifest e, se preciso, DAS (mas o DAS precisa de autorização expressa).
 
 ---
 
@@ -123,7 +123,7 @@ Agente faz:
 
 - Ajusta `.github/workflows/` quando mexe em pipeline.  
 - Segue esquema de versão, não inventa outro.  
-- Mudança grande em CI/CD → atualizar DAS/ADR.
+- Mudança grande em CI/CD → atualizar DAS (mas apenas se explicitamente autorizado) e ADR.
 
 ---
 
@@ -146,7 +146,7 @@ Regras:
 - Código claro, configurável via env.
 - Comentário explica decisão, não reexplica óbvio.  
 - Docs em português Brasil, tom institucional, mas direto.  
-- Mudança de arquitetura → atualizar DAS e ADR, não só código.
+- Mudança de arquitetura → atualizar DAS (mas apenas se explicitamente autorizado) e ADR, não só código.
 
 ---
 
@@ -162,7 +162,7 @@ Use agente para:
 
 - Escrever:
   - ADR nova,  
-  - trecho de DAS,  
+  - trecho de DAS (mas apenas se explicitamente autorizado),  
   - workflow do GitHub Actions.
 
 Sempre falar pro agente:
