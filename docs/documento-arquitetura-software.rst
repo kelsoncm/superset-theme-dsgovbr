@@ -156,7 +156,7 @@ A arquitetura lógica é composta por sete domínios principais: interface Super
 
 A autenticação é tratada como configurável, com início operacional em OAuth2 e suporte arquitetural documentado para login local, LDAP e acesso.gov.br. A opção por não adotar JWT como mecanismo inicial busca reduzir complexidade e acelerar a primeira entrega, sem bloquear evolução futura para cenários específicos de integração. [cite:21][cite:31]
 
-.. code-block:: text
+.. mermaid::
 
     flowchart TD
         U[Usuário] --> RP[Reverse Proxy\nNginx ou Traefik]
@@ -187,7 +187,7 @@ Ambientes
 
 São previstos dois ambientes formais: desenvolvimento e produção. O ambiente de desenvolvimento receberá artefatos associados a draft release/tag com sufixo ``-dev``, enquanto o ambiente de produção receberá artefatos de releases finais estáveis. [cite:22]
 
-.. code-block:: text
+.. mermaid::
 
     flowchart LR
         DEV[Git tag/release vX.Y.Z-dev] --> GHA1[GitHub Actions - Dev]
